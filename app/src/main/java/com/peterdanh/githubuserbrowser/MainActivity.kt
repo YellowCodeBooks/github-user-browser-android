@@ -11,7 +11,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.peterdanh.githubuserbrowser.ui.theme.GitHubUserBrowserAndroidTheme
+import androidx.navigation.NavGraph
+import androidx.navigation.compose.rememberNavController
+import com.peterdanh.githubuserbrowser.presentation.navigation.AppNavGraph
+import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndroidTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,8 +23,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             GitHubUserBrowserAndroidTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
+                    AppContent(
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
@@ -31,17 +33,18 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
+fun AppContent(modifier: Modifier = Modifier) {
+    val naController = rememberNavController()
+    AppNavGraph(
+        modifier = modifier,
+        navController = naController
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun AppContentPreview() {
     GitHubUserBrowserAndroidTheme {
-        Greeting("Android")
+        AppContent()
     }
 }

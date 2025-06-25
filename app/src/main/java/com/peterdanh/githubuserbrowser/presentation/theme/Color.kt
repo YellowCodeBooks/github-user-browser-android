@@ -1,4 +1,4 @@
-package com.peterdanh.githubuserbrowser.ui.theme
+package com.peterdanh.githubuserbrowser.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
