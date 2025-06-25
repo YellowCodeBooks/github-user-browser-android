@@ -16,7 +16,7 @@ Clone the repo and open in Android Studio Giraffe+.
 
 ```bash
 git clone https://github.com/YellowCodeBooks/github-user-browser-android.git
-'''
+```
 
 ## ⚠️ Intellectual Property Notice
 Please respect the ownership of this project.
