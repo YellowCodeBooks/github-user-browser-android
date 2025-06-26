@@ -71,6 +71,9 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.mockwebserver)
+    testImplementation(libs.retrofit)
+    testImplementation(libs.converter.gson)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
