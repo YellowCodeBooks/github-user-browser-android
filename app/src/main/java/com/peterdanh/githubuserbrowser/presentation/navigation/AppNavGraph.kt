@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.peterdanh.githubuserbrowser.presentation.screen.detail.DetailScreen
 import com.peterdanh.githubuserbrowser.presentation.screen.home.HomeScreen
 
 @Composable
@@ -16,18 +17,18 @@ fun AppNavGraph(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = HomeScreen
+        startDestination = Home
     ) {
-        composable<HomeScreen> {
+        composable<Home> {
             HomeScreen(
                 onNavigateToDetail = { username ->
-                    navController.navigate(DetailScreen(username))
+                    navController.navigate(Detail(username))
                 }
             )
         }
 
-        composable<DetailScreen> { backStackEntry ->
-            val detailScreenRoute: DetailScreen = backStackEntry.toRoute()
+        composable<Detail> { backStackEntry ->
+            val detailScreenRoute: Detail = backStackEntry.toRoute()
             DetailScreen(username = detailScreenRoute.username)
         }
     }

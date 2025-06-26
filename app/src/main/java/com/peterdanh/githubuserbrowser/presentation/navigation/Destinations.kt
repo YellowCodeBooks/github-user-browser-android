@@ -3,7 +3,7 @@ package com.peterdanh.githubuserbrowser.presentation.navigation
 import kotlinx.serialization.Serializable
 
 @Serializable
-object HomeScreen
+object Home
 
 @Serializable
-data class DetailScreen(val username: String)
+data class Detail(val username: String)
