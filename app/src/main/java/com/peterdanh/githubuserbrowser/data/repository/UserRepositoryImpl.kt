@@ -1,5 +1,6 @@
 package com.peterdanh.githubuserbrowser.data.repository
 
+import com.peterdanh.githubuserbrowser.data.mapper.toDomain
 import com.peterdanh.githubuserbrowser.data.remote.GitHubApiService
 import com.peterdanh.githubuserbrowser.domain.model.User
 import com.peterdanh.githubuserbrowser.domain.model.UserDetail
