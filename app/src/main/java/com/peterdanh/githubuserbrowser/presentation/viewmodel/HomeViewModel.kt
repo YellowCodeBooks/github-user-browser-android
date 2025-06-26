@@ -7,6 +7,7 @@ import com.peterdanh.githubuserbrowser.domain.usecase.GetUsersUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -32,17 +33,16 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
-            try {
-                val result = getUsersUseCase(lastSince)
-                if (result.isNotEmpty()) {
-                    lastSince += result.size
-                    _users.value = _users.value + result
+
+            getUsersUseCase(lastSince).collectLatest { result ->
+                if (result.users.isNotEmpty()) {
+                    if (result.apiUserCount != 0) {
+                        lastSince += result.apiUserCount
+                    }
+                    _users.value = result.users
                 } else {
                     reachedEnd = true
                 }
-            } catch (e: Exception) {
-                _error.value = "Error: ${e.localizedMessage}"
-            } finally {
                 _isLoading.value = false
             }
         }

@@ -1,5 +1,6 @@
 package com.peterdanh.githubuserbrowser.di
 
+import com.peterdanh.githubuserbrowser.data.local.dao.UserDao
 import com.peterdanh.githubuserbrowser.data.remote.GitHubApiService
 import com.peterdanh.githubuserbrowser.data.repository.UserRepositoryImpl
 import com.peterdanh.githubuserbrowser.domain.repository.UserRepository
@@ -28,8 +29,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideUserRepository(api: GitHubApiService): UserRepository {
-        return UserRepositoryImpl(api)
+    fun provideUserRepository(
+        api: GitHubApiService,
+        userDao: UserDao
+    ): UserRepository {
+        return UserRepositoryImpl(api, userDao)
     }
 
     @Provides
