@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -52,14 +53,12 @@ fun HomeScreen(
             TopAppBar(title = { Text("GitHub Users") })
         }
     ) { paddingValues ->
-        Box(modifier = Modifier
-            .padding(paddingValues)
-            .fillMaxSize()) {
-
+        Box(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+        ) {
             when {
-                isLoading -> {
-                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-                }
                 error != null -> {
                     Text(
                         text = error ?: "",
@@ -67,15 +66,42 @@ fun HomeScreen(
                         modifier = Modifier.align(Alignment.Center)
                     )
                 }
+
+                users.isEmpty() && isLoading -> {
+                    CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                }
+
                 else -> {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
                         contentPadding = PaddingValues(16.dp),
-                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-                        items(users) { user ->
-                            UserItem(user.login, user.avatarUrl, user.htmlUrl) {
+                        itemsIndexed(users) { index, user ->
+                            UserItem(
+                                username = user.login,
+                                avatarUrl = user.avatarUrl,
+                                htmlUrl = user.htmlUrl
+                            ) {
                                 onNavigateToDetail(user.login)
+                            }
+
+                            // Trigger loading more when reaching near end
+                            if (index >= users.size - 3 && !isLoading) {
+                                viewModel.loadUsers()
+                            }
+                        }
+
+                        item {
+                            if (isLoading) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    CircularProgressIndicator()
+                                }
                             }
                         }
                     }

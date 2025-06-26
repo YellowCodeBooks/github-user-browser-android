@@ -24,15 +24,22 @@ class HomeViewModel @Inject constructor(
     val error: StateFlow<String?> = _error
 
     private var lastSince = 0
+    private var reachedEnd = false
 
     fun loadUsers() {
+        if (_isLoading.value || reachedEnd) return
+
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
             try {
                 val result = getUsersUseCase(lastSince)
-                _users.value = _users.value + result
-                lastSince += result.size
+                if (result.isNotEmpty()) {
+                    lastSince += result.size
+                    _users.value = _users.value + result
+                } else {
+                    reachedEnd = true
+                }
             } catch (e: Exception) {
                 _error.value = "Error: ${e.localizedMessage}"
             } finally {
