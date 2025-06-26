@@ -13,8 +13,10 @@ serialization = "1.6.21"
 retrofit = "3.0.0"
 converterGson = "3.0.0"
 hiltAndroid = "2.56.2"
+hiltNavigationCompose = "1.2.0"
 hiltAndroidCompiler = "2.53.1"
 ksp = "2.0.20-1.0.25"
+coil = "2.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,7 +37,9 @@ androidx-navigation-compose = { module = "androidx.navigation:navigation-compose
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltAndroid" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltAndroidCompiler" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
