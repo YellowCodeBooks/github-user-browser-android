@@ -50,8 +50,8 @@ fun UserCard(
                 modifier = Modifier
                     .size(64.dp)
                     .clip(RoundedCornerShape(12.dp))
-                    .background(Color(0xFFF0F0F0))
-                    .padding(4.dp) // Optional: adds inner padding
+                    .background(Color.Gray.copy(alpha = 0.1f))
+                    .padding(4.dp)
             ) {
                 AsyncImage(
                     model = avatarUrl,

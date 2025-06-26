@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +37,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.peterdanh.githubuserbrowser.presentation.component.FollowerStat
 import com.peterdanh.githubuserbrowser.presentation.component.UserCard
 import androidx.navigation.NavHostController
+import com.peterdanh.githubuserbrowser.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -108,14 +108,14 @@ fun DetailScreen(
                             }
                         )
 
-                        Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(18.dp))
 
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            FollowerStat(Icons.Default.Person, "Follower", "${user!!.followers}+")
-                            FollowerStat(Icons.Default.Person, "Following", "${user!!.following}+")
+                            FollowerStat(R.drawable.ic_follower, "Follower", "${user!!.followers}+")
+                            FollowerStat(R.drawable.ic_following, "Following", "${user!!.following}+")
                         }
 
                         Spacer(modifier = Modifier.height(32.dp))

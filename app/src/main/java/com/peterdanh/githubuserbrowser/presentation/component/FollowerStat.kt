@@ -1,28 +1,49 @@
 package com.peterdanh.githubuserbrowser.presentation.component
 
+import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.peterdanh.githubuserbrowser.R
 import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndroidTheme
 
 @Composable
-fun FollowerStat(icon: ImageVector, label: String, count: String) {
+fun FollowerStat(
+    @DrawableRes icon: Int,
+    label: String,
+    count: String
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Icon(icon, contentDescription = null, modifier = Modifier.size(32.dp))
+        Box(
+            modifier = Modifier
+                .background(
+                    color = Color.Gray.copy(alpha = 0.1f),
+                    shape = CircleShape
+                )
+                .padding(8.dp)
+        ) {
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = null,
+                modifier = Modifier.size(32.dp)
+            )
+        }
         Text(text = count, style = MaterialTheme.typography.titleMedium)
         Text(text = label, style = MaterialTheme.typography.bodySmall)
     }
@@ -39,12 +60,12 @@ fun PreviewFollowerStatRow() {
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             FollowerStat(
-                icon = Icons.Default.Person,
+                icon = R.drawable.ic_follower,
                 label = "Follower",
                 count = "100+"
             )
             FollowerStat(
-                icon = Icons.Default.Person,
+                icon = R.drawable.ic_following,
                 label = "Following",
                 count = "10+"
             )
