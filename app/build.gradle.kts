@@ -68,12 +68,18 @@ dependencies {
     // Coil for image loading
     implementation(libs.coil.compose)
 
+    //Room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.room.compiler)
+    implementation(libs.androidx.room.ktx)
+
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.mockwebserver)
     testImplementation(libs.retrofit)
     testImplementation(libs.converter.gson)
+    testImplementation(libs.androidx.room.testing)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
