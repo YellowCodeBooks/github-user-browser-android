@@ -118,10 +118,12 @@ fun DetailScreen(
                             FollowerStat(R.drawable.ic_following, "Following", "${user!!.following}+")
                         }
 
-                        Spacer(modifier = Modifier.height(32.dp))
+                        Spacer(modifier = Modifier.height(18.dp))
 
-                        Text("Blog", style = MaterialTheme.typography.titleMedium)
-                        Text(text = user!!.htmlUrl, color = MaterialTheme.colorScheme.primary)
+                        Column(modifier = Modifier.fillMaxWidth()) {
+                            Text("Blog", style = MaterialTheme.typography.headlineMedium)
+                            Text(text = user!!.htmlUrl, color = MaterialTheme.colorScheme.primary)
+                        }
                     }
                 }
             }

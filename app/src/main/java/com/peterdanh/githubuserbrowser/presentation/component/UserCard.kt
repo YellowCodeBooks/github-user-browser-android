@@ -48,7 +48,7 @@ fun UserCard(
         ) {
             Box(
                 modifier = Modifier
-                    .size(64.dp)
+                    .size(78.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .background(Color.Gray.copy(alpha = 0.1f))
                     .padding(4.dp)
@@ -57,7 +57,7 @@ fun UserCard(
                     model = avatarUrl,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(64.dp)
+                        .size(70.dp)
                         .clip(CircleShape),
                     placeholder = painterResource(id = R.drawable.ic_avatar_placeholder),
                     error = painterResource(id = R.drawable.ic_avatar_placeholder)
@@ -65,10 +65,10 @@ fun UserCard(
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(text = name, style = MaterialTheme.typography.titleMedium)
-                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = name, style = MaterialTheme.typography.titleLarge)
+                Spacer(modifier = Modifier.height(8.dp))
                 HorizontalDivider()
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(8.dp))
                 subtitleContent()
             }
         }
