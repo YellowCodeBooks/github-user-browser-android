@@ -3,15 +3,10 @@ package com.peterdanh.githubuserbrowser.presentation.screen.home
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
@@ -31,7 +26,8 @@ import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndro
 import com.peterdanh.githubuserbrowser.presentation.viewmodel.HomeViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
-import coil.compose.AsyncImage
+import androidx.compose.ui.text.style.TextDecoration
+import com.peterdanh.githubuserbrowser.presentation.component.UserCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -77,13 +73,20 @@ fun HomeScreen(
                         verticalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
                         itemsIndexed(users) { index, user ->
-                            UserItem(
-                                username = user.login,
+                            UserCard(
                                 avatarUrl = user.avatarUrl,
-                                htmlUrl = user.htmlUrl
-                            ) {
-                                onNavigateToDetail(user.login)
-                            }
+                                name = user.login,
+                                subtitleContent = {
+                                    Text(
+                                        text = user.htmlUrl,
+                                        style = MaterialTheme.typography.bodySmall.copy(
+                                            color = MaterialTheme.colorScheme.primary,
+                                            textDecoration = TextDecoration.Underline
+                                        )
+                                    )
+                                },
+                                modifier = Modifier.clickable { onNavigateToDetail(user.login) }
+                            )
 
                             // Trigger loading more when reaching near end
                             if (index >= users.size - 3 && !isLoading) {
@@ -106,33 +109,6 @@ fun HomeScreen(
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun UserItem(
-    username: String,
-    avatarUrl: String,
-    htmlUrl: String,
-    onClick: () -> Unit
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        AsyncImage(
-            model = avatarUrl,
-            contentDescription = null,
-            modifier = Modifier.size(48.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Column {
-            Text(text = username, style = MaterialTheme.typography.titleMedium)
-            Text(text = htmlUrl, style = MaterialTheme.typography.bodySmall)
         }
     }
 }

@@ -10,12 +10,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -29,7 +32,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndroidTheme
 import com.peterdanh.githubuserbrowser.presentation.viewmodel.DetailViewModel
 import androidx.compose.runtime.getValue
-import coil.compose.AsyncImage
 import com.peterdanh.githubuserbrowser.presentation.component.FollowerStat
 import com.peterdanh.githubuserbrowser.presentation.component.UserCard
 
@@ -80,7 +82,15 @@ fun DetailScreen(
                         UserCard(
                             avatarUrl = user!!.avatarUrl,
                             name = user!!.login,
-                            location = user!!.location
+                            subtitleContent = {
+                                user!!.location?.let {
+                                    Row(verticalAlignment = Alignment.CenterVertically) {
+                                        Icon(Icons.Default.Place, contentDescription = null, modifier = Modifier.size(16.dp))
+                                        Spacer(modifier = Modifier.width(4.dp))
+                                        Text(text = it, style = MaterialTheme.typography.bodySmall)
+                                    }
+                                }
+                            }
                         )
 
                         Spacer(modifier = Modifier.height(24.dp))

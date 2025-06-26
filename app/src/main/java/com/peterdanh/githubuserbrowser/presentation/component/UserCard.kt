@@ -25,13 +25,12 @@ import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndro
 fun UserCard(
     avatarUrl: String,
     name: String,
-    location: String?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    subtitleContent: @Composable () -> Unit
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
             .clip(RoundedCornerShape(16.dp))
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(16.dp),
@@ -47,9 +46,7 @@ fun UserCard(
         Spacer(modifier = Modifier.width(16.dp))
         Column {
             Text(text = name, style = MaterialTheme.typography.titleMedium)
-            if (!location.isNullOrEmpty()) {
-                Text(text = "📍 $location", style = MaterialTheme.typography.bodySmall)
-            }
+            subtitleContent()
         }
     }
 }
@@ -60,8 +57,9 @@ fun PreviewUserCard() {
     GitHubUserBrowserAndroidTheme {
         UserCard(
             avatarUrl = "https://avatars.githubusercontent.com/u/1?v=4",
-            name = "David Patel",
-            location = "Vietnam"
-        )
+            name = "David Patel"
+        ) {
+            Text("Sub content")
+        }
     }
 }
