@@ -1,10 +1,13 @@
 package com.peterdanh.githubuserbrowser.domain.usecase
 
 import com.peterdanh.githubuserbrowser.domain.model.User
+import com.peterdanh.githubuserbrowser.domain.model.UserResult
 import com.peterdanh.githubuserbrowser.domain.repository.UserRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
@@ -25,12 +28,13 @@ class GetUsersUseCaseTest {
             User("david", "https://avatar.com/1", "https://github.com/david"),
             User("lisa", "https://avatar.com/2", "https://github.com/lisa")
         )
+        val usersResult = UserResult(users = mockUsers, apiUserCount = mockUsers.size)
 
-        coEvery { repository.getUsers(any()) } returns mockUsers
+        coEvery { repository.getUsers(any()) } returns flowOf(usersResult)
 
-        val result = useCase(0)
+        val result = useCase(0).first()
 
-        assertEquals(2, result.size)
-        assertEquals("david", result.first().login)
+        assertEquals(2, result.users.size)
+        assertEquals("david", result.users.first().login)
     }
 }

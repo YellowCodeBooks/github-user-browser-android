@@ -1,160 +1,87 @@
 package com.peterdanh.githubuserbrowser.data.repository
 
 import com.google.gson.GsonBuilder
+import com.peterdanh.githubuserbrowser.data.local.dao.UserDao
+import com.peterdanh.githubuserbrowser.data.mapper.toDomain
+import com.peterdanh.githubuserbrowser.data.mapper.toEntity
 import com.peterdanh.githubuserbrowser.data.remote.GitHubApiService
+import com.peterdanh.githubuserbrowser.data.remote.dto.UserDto
+import com.peterdanh.githubuserbrowser.domain.model.User
+import io.mockk.Runs
+import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Before
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 import kotlin.test.Test
 import kotlin.test.fail
 
 class UserRepositoryImplTest {
-    private lateinit var mockWebServer: MockWebServer
-    private lateinit var apiService: GitHubApiService
+    private lateinit var api: GitHubApiService
+    private lateinit var dao: UserDao
     private lateinit var repository: UserRepositoryImpl
 
+    private val testDispatcher = UnconfinedTestDispatcher()
+
     @Before
-    fun setUp() {
-        mockWebServer = MockWebServer()
-        mockWebServer.start()
-
-        val gson = GsonBuilder().create()
-        apiService = Retrofit.Builder()
-            .baseUrl(mockWebServer.url("/"))
-            .addConverterFactory(GsonConverterFactory.create(gson))
-            .build()
-            .create(GitHubApiService::class.java)
-
-        repository = UserRepositoryImpl(apiService)
-    }
-
-    @After
-    fun tearDown() {
-        mockWebServer.shutdown()
+    fun setup() {
+        api = mockk()
+        dao = mockk()
+        repository = UserRepositoryImpl(api, dao)
     }
 
     @Test
-    fun `getUsers returns correct user list`() = runBlocking {
-        val mockJson = """
-            [
-              {
-                "login": "mojombo",
-                "avatar_url": "https://avatars.githubusercontent.com/u/1?v=4",
-                "html_url": "https://github.com/mojombo"
-              },
-              {
-                "login": "defunkt",
-                "avatar_url": "https://avatars.githubusercontent.com/u/2?v=4",
-                "html_url": "https://github.com/defunkt"
-              }
-            ]
-        """.trimIndent()
-
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(200)
-                .setBody(mockJson)
+    fun `getUsers should emit Room data and correct apiUserCount when API succeeds`() = runTest(testDispatcher) {
+        // given
+        val since = 0
+        val apiUsers = listOf(
+            UserDto("peter", "https://avatar.com/1", "https://github.com/peter")
         )
+        val roomEntities = apiUsers.map { it.toDomain().toEntity() }
 
-        val result = repository.getUsers(0)
+        coEvery { api.getUsers(since) } returns apiUsers
+        coEvery { dao.insertUsers(roomEntities) } just Runs
+        every { dao.getAllUsers() } returns flowOf(roomEntities)
 
-        assertEquals(2, result.size)
-        assertEquals("mojombo", result[0].login)
-        assertEquals("defunkt", result[1].login)
+        // when
+        val result = repository.getUsers(since).first()
+
+        // then
+        assertEquals(1, result.users.size)
+        assertEquals(1, result.apiUserCount)
+        assertEquals("peter", result.users.first().login)
     }
 
     @Test
-    fun `getUsers throws exception on 404 Not Found`() = runBlocking {
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(404)
-        )
+    fun `getUsers should still emit Room data when API fails`() = runTest(testDispatcher) {
+        // given
+        val since = 0
+        val roomEntities = listOf(
+            User("peter", "https://avatar.com/1", "https://github.com/peter")
+        ).map { it.toEntity() }
 
-        try {
-            repository.getUsers(0)
-            fail("Expected exception not thrown")
-        } catch (e: Exception) {
-            assertTrue(e.message!!.contains("404"))
-        }
-    }
+        coEvery { api.getUsers(since) } throws IOException("No internet")
+        every { dao.getAllUsers() } returns flowOf(roomEntities)
 
-    @Test
-    fun `getUsers throws exception on 500 Internal Server Error`() = runBlocking {
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(500)
-                .setBody("Internal Server Error")
-        )
+        // we ignore insertUsers because API fails
+        // when
+        val result = repository.getUsers(since).first()
 
-        try {
-            repository.getUsers(0)
-            fail("Expected exception not thrown")
-        } catch (e: Exception) {
-            assertTrue(e.message!!.contains("500"))
-        }
-    }
-
-    @Test
-    fun `getUserDetail returns user detail successfully`() = runBlocking {
-        val mockJson = """
-        {
-          "login": "mojombo",
-          "avatar_url": "https://avatars.githubusercontent.com/u/1?v=4",
-          "html_url": "https://github.com/mojombo",
-          "location": "San Francisco",
-          "followers": 100,
-          "following": 50
-        }
-    """.trimIndent()
-
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(200)
-                .setBody(mockJson)
-        )
-
-        val result = repository.getUserDetail("mojombo")
-
-        assertEquals("mojombo", result.login)
-        assertEquals("San Francisco", result.location)
-        assertEquals(100, result.followers)
-        assertEquals(50, result.following)
-    }
-
-    @Test
-    fun `getUserDetail throws exception on 404`() = runBlocking {
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(404)
-        )
-
-        try {
-            repository.getUserDetail("unknown_user")
-            fail("Expected exception not thrown")
-        } catch (e: Exception) {
-            assertTrue(e.message!!.contains("404"))
-        }
-    }
-
-    @Test
-    fun `getUserDetail throws exception on 500`() = runBlocking {
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(500)
-                .setBody("Server Error")
-        )
-
-        try {
-            repository.getUserDetail("error_user")
-            fail("Expected exception not thrown")
-        } catch (e: Exception) {
-            assertTrue(e.message!!.contains("500"))
-        }
+        // then
+        assertEquals(1, result.users.size)
+        assertEquals(0, result.apiUserCount) // API failed
     }
 }

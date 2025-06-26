@@ -34,16 +34,22 @@ class HomeViewModel @Inject constructor(
             _isLoading.value = true
             _error.value = null
 
-            getUsersUseCase(lastSince).collectLatest { result ->
-                if (result.users.isNotEmpty()) {
-                    if (result.apiUserCount != 0) {
-                        lastSince += result.apiUserCount
+            try {
+                getUsersUseCase(lastSince).collectLatest { result ->
+                    if (result.users.isNotEmpty()) {
+                        if (result.apiUserCount != 0) {
+                            lastSince += result.apiUserCount
+                        }
+                        _users.value = result.users
+                    } else {
+                        reachedEnd = true
                     }
-                    _users.value = result.users
-                } else {
-                    reachedEnd = true
+                    _isLoading.value = false
                 }
+            } catch (e: Exception) {
+                _error.value = "Error: ${e.message}"
                 _isLoading.value = false
+                _users.value = emptyList()
             }
         }
     }
