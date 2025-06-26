@@ -3,9 +3,15 @@ package com.peterdanh.githubuserbrowser.presentation.screen.detail
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +30,8 @@ import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndro
 import com.peterdanh.githubuserbrowser.presentation.viewmodel.DetailViewModel
 import androidx.compose.runtime.getValue
 import coil.compose.AsyncImage
+import com.peterdanh.githubuserbrowser.presentation.component.FollowerStat
+import com.peterdanh.githubuserbrowser.presentation.component.UserCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,16 +77,26 @@ fun DetailScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        AsyncImage(
-                            model = user!!.avatarUrl,
-                            contentDescription = null,
-                            modifier = Modifier.size(120.dp)
+                        UserCard(
+                            avatarUrl = user!!.avatarUrl,
+                            name = user!!.login,
+                            location = user!!.location
                         )
-                        Text(user!!.login, style = MaterialTheme.typography.headlineMedium)
-                        Text(user!!.htmlUrl, style = MaterialTheme.typography.bodyMedium)
-                        Text("Location: ${user!!.location ?: "Unknown"}")
-                        Text("Followers: ${user!!.followers}")
-                        Text("Following: ${user!!.following}")
+
+                        Spacer(modifier = Modifier.height(24.dp))
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            FollowerStat(Icons.Default.Person, "Follower", "${user!!.followers}+")
+                            FollowerStat(Icons.Default.Person, "Following", "${user!!.following}+")
+                        }
+
+                        Spacer(modifier = Modifier.height(32.dp))
+
+                        Text("Blog", style = MaterialTheme.typography.titleMedium)
+                        Text(text = user!!.htmlUrl, color = MaterialTheme.colorScheme.primary)
                     }
                 }
             }
