@@ -39,8 +39,10 @@ fun HomeScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val error by viewModel.error.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.loadUsers()
+    LaunchedEffect(users.isEmpty()) {
+        if (users.isEmpty()) {
+            viewModel.loadUsers()
+        }
     }
 
     Scaffold(
