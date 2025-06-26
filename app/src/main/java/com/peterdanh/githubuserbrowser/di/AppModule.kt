@@ -3,6 +3,7 @@ package com.peterdanh.githubuserbrowser.di
 import com.peterdanh.githubuserbrowser.data.remote.GitHubApiService
 import com.peterdanh.githubuserbrowser.data.repository.UserRepositoryImpl
 import com.peterdanh.githubuserbrowser.domain.repository.UserRepository
+import com.peterdanh.githubuserbrowser.domain.usecase.GetUserDetailUseCase
 import com.peterdanh.githubuserbrowser.domain.usecase.GetUsersUseCase
 import dagger.Module
 import dagger.Provides
@@ -35,5 +36,11 @@ object AppModule {
     @Singleton
     fun provideGetUsersUseCase(repository: UserRepository): GetUsersUseCase {
         return GetUsersUseCase(repository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetUserDetailUseCase(repository: UserRepository): GetUserDetailUseCase {
+        return GetUserDetailUseCase(repository)
     }
 }
