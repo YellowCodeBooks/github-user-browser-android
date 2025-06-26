@@ -99,4 +99,62 @@ class UserRepositoryImplTest {
             assertTrue(e.message!!.contains("500"))
         }
     }
+
+    @Test
+    fun `getUserDetail returns user detail successfully`() = runBlocking {
+        val mockJson = """
+        {
+          "login": "mojombo",
+          "avatar_url": "https://avatars.githubusercontent.com/u/1?v=4",
+          "html_url": "https://github.com/mojombo",
+          "location": "San Francisco",
+          "followers": 100,
+          "following": 50
+        }
+    """.trimIndent()
+
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(200)
+                .setBody(mockJson)
+        )
+
+        val result = repository.getUserDetail("mojombo")
+
+        assertEquals("mojombo", result.login)
+        assertEquals("San Francisco", result.location)
+        assertEquals(100, result.followers)
+        assertEquals(50, result.following)
+    }
+
+    @Test
+    fun `getUserDetail throws exception on 404`() = runBlocking {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(404)
+        )
+
+        try {
+            repository.getUserDetail("unknown_user")
+            fail("Expected exception not thrown")
+        } catch (e: Exception) {
+            assertTrue(e.message!!.contains("404"))
+        }
+    }
+
+    @Test
+    fun `getUserDetail throws exception on 500`() = runBlocking {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(500)
+                .setBody("Server Error")
+        )
+
+        try {
+            repository.getUserDetail("error_user")
+            fail("Expected exception not thrown")
+        } catch (e: Exception) {
+            assertTrue(e.message!!.contains("500"))
+        }
+    }
 }
