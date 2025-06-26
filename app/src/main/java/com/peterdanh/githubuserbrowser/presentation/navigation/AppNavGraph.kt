@@ -29,7 +29,10 @@ fun AppNavGraph(
 
         composable<Detail> { backStackEntry ->
             val detailScreenRoute: Detail = backStackEntry.toRoute()
-            DetailScreen(username = detailScreenRoute.username)
+            DetailScreen(
+                username = detailScreenRoute.username,
+                navController = navController
+            )
         }
     }
 }

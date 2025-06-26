@@ -12,13 +12,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Place
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -32,13 +35,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndroidTheme
 import com.peterdanh.githubuserbrowser.presentation.viewmodel.DetailViewModel
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import com.peterdanh.githubuserbrowser.presentation.component.FollowerStat
 import com.peterdanh.githubuserbrowser.presentation.component.UserCard
+import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
     username: String,
+    navController: NavHostController,
     viewModel: DetailViewModel = hiltViewModel()
 ) {
     val user by viewModel.userDetail.collectAsState()
@@ -51,7 +57,17 @@ fun DetailScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text(text = username) })
+            TopAppBar(
+                title = { Text(text = "User Details") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
+            )
         }
     ) { padding ->
         Box(
@@ -118,6 +134,9 @@ fun DetailScreen(
 @Composable
 fun PreviewDetailScreen() {
     GitHubUserBrowserAndroidTheme {
-        DetailScreen(username = "octocat")
+        DetailScreen(
+            username = "octocat",
+            navController = NavHostController(context = LocalContext.current)
+        )
     }
 }
