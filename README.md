@@ -8,8 +8,9 @@
 ## Features
 - Paginated list of GitHub users (20 per fetch)
 - Detail screen for each user
-- Persistent cache for offline viewing
-- Unit tests with JUnit + MockK
+- Offline-first caching with Room
+- Infinite scroll support
+- Unit & UI tests with JUnit, MockK, Turbine, Compose UI Test
 
 ## Setup
 Clone the repo and open in Android Studio Giraffe+.
