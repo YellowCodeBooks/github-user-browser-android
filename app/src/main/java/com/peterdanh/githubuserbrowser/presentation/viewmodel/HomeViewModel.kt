@@ -11,22 +11,41 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel responsible for managing the state and logic of the home screen,
+ * including loading and exposing a list of GitHub users.
+ *
+ * @property getUsersUseCase The use case for retrieving a list of users.
+ */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getUsersUseCase: GetUsersUseCase
 ) : ViewModel() {
+    /**
+     * StateFlow holding the current list of users.
+     */
     private val _users = MutableStateFlow<List<User>>(emptyList())
     val users: StateFlow<List<User>> = _users
 
+    /**
+     * StateFlow indicating whether a loading operation is in progress.
+     */
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
+    /**
+     * StateFlow holding the current error message, if any.
+     */
     private val _error = MutableStateFlow<String?>(null)
     val error: StateFlow<String?> = _error
 
     private var lastSince = 0
     private var reachedEnd = false
 
+    /**
+     * Loads users from the repository, handling loading state and errors.
+     * Prevents duplicate loads and tracks pagination.
+     */
     fun loadUsers() {
         if (_isLoading.value || reachedEnd) return
 

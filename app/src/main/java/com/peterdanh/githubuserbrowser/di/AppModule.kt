@@ -14,9 +14,18 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+/**
+ * Dagger Hilt module that provides application-level dependencies.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    /**
+     * Provides a singleton instance of [GitHubApiService] using Retrofit.
+     *
+     * @return The [GitHubApiService] implementation.
+     */
     @Provides
     @Singleton
     fun provideGitHubApi(): GitHubApiService {
@@ -27,6 +36,13 @@ object AppModule {
             .create(GitHubApiService::class.java)
     }
 
+    /**
+     * Provides a singleton instance of [UserRepository].
+     *
+     * @param api The [GitHubApiService] for remote data access.
+     * @param userDao The [UserDao] for local data access.
+     * @return The [UserRepository] implementation.
+     */
     @Provides
     @Singleton
     fun provideUserRepository(
@@ -36,12 +52,24 @@ object AppModule {
         return UserRepositoryImpl(api, userDao)
     }
 
+    /**
+     * Provides a singleton instance of [GetUsersUseCase].
+     *
+     * @param repository The [UserRepository] to use for retrieving users.
+     * @return The [GetUsersUseCase] instance.
+     */
     @Provides
     @Singleton
     fun provideGetUsersUseCase(repository: UserRepository): GetUsersUseCase {
         return GetUsersUseCase(repository)
     }
 
+    /**
+     * Provides a singleton instance of [GetUserDetailUseCase].
+     *
+     * @param repository The [UserRepository] to use for retrieving user details.
+     * @return The [GetUserDetailUseCase] instance.
+     */
     @Provides
     @Singleton
     fun provideGetUserDetailUseCase(repository: UserRepository): GetUserDetailUseCase {

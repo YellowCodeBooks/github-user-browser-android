@@ -10,6 +10,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * ViewModel responsible for managing the state of user detail data.
+ *
+ * @property getUserDetailUseCase The use case for retrieving detailed information about a user.
+ */
 @HiltViewModel
 class DetailViewModel @Inject constructor(
     private val getUserDetailUseCase: GetUserDetailUseCase

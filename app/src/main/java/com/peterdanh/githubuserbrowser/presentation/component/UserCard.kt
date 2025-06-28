@@ -27,6 +27,14 @@ import coil.compose.AsyncImage
 import com.peterdanh.githubuserbrowser.R
 import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndroidTheme
 
+/**
+ * Displays a user card with avatar, name, and custom subtitle content.
+ *
+ * @param avatarUrl The URL of the user's avatar image.
+ * @param name The name of the user to display.
+ * @param modifier The [Modifier] to be applied to the card.
+ * @param subtitleContent A composable lambda for displaying additional content below the name.
+ */
 @Composable
 fun UserCard(
     avatarUrl: String,

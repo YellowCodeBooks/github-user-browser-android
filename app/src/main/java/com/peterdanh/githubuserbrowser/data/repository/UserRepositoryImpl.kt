@@ -14,18 +14,33 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
+/**
+ * Implementation of [UserRepository] that manages user data from both remote (GitHub API)
+ * and local (Room database) sources.
+ *
+ * @property api The [GitHubApiService] for remote data access.
+ * @property userDao The [UserDao] for local database operations.
+ */
 class UserRepositoryImpl(
     private val api: GitHubApiService,
     private val userDao: UserDao
 ) : UserRepository {
+
+    /**
+     * Retrieves a list of users starting from the specified user index.
+     * Attempts to fetch from the API and caches results locally.
+     * Falls back to local data if the API call fails.
+     *
+     * @param since The user index to start the list from (for pagination).
+     * @return A [Flow] emitting lists of [User] objects.
+     * @throws Exception if both remote and local data sources fail.
+     */
     override fun getUsers(since: Int): Flow<List<User>> = flow {
-        var apiUserCount = 0
         try {
             val remoteUsers = api.getUsers(since).map {
                 it.toDomain().toEntity()
             }
             userDao.insertUsers(remoteUsers)
-            apiUserCount = remoteUsers.size
         } catch (e: Exception) {
             Log.d("UserRepositoryImpl", "Error fetching users from API, loading from local, exception: ${e.message}")
             // API failed, will check local data below
@@ -44,6 +59,12 @@ class UserRepositoryImpl(
         )
     }
 
+    /**
+     * Retrieves detailed information for a specific user from the remote API.
+     *
+     * @param username The username of the user to retrieve details for.
+     * @return A [UserDetail] object containing detailed user information.
+     */
     override suspend fun getUserDetail(username: String): UserDetail {
         return api.getUserDetail(username).toDomain()
     }

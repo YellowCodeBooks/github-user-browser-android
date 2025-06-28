@@ -10,9 +10,19 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Dagger Hilt module that provides database-related dependencies.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
+
+    /**
+     * Provides a singleton instance of [AppDatabase] using Room.
+     *
+     * @param app The application context.
+     * @return The [AppDatabase] instance.
+     */
     @Provides
     @Singleton
     fun provideDatabase(app: Application): AppDatabase {
@@ -23,6 +33,12 @@ object DatabaseModule {
             ).fallbackToDestructiveMigration(false).build()
     }
 
+    /**
+     * Provides the [UserDao] for accessing user data in the database.
+     *
+     * @param db The [AppDatabase] instance.
+     * @return The [UserDao] instance.
+     */
     @Provides
     fun provideUserDao(db: AppDatabase): UserDao {
         return db.userDao()
