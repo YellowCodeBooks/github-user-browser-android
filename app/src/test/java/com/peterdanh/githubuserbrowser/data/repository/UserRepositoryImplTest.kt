@@ -1,6 +1,5 @@
 package com.peterdanh.githubuserbrowser.data.repository
 
-import com.google.gson.GsonBuilder
 import com.peterdanh.githubuserbrowser.data.local.dao.UserDao
 import com.peterdanh.githubuserbrowser.data.mapper.toDomain
 import com.peterdanh.githubuserbrowser.data.mapper.toEntity
@@ -13,27 +12,21 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import junit.framework.TestCase.assertEquals
-import junit.framework.TestCase.assertTrue
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import okhttp3.mockwebserver.MockResponse
-import okhttp3.mockwebserver.MockWebServer
-import org.junit.After
 import org.junit.Before
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import kotlin.test.Test
-import kotlin.test.fail
 
 class UserRepositoryImplTest {
     private lateinit var api: GitHubApiService
     private lateinit var dao: UserDao
     private lateinit var repository: UserRepositoryImpl
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
@@ -57,12 +50,11 @@ class UserRepositoryImplTest {
         every { dao.getAllUsers() } returns flowOf(roomEntities)
 
         // when
-        val result = repository.getUsers(since).first()
+        val users = repository.getUsers(since).first()
 
         // then
-        assertEquals(1, result.users.size)
-        assertEquals(1, result.apiUserCount)
-        assertEquals("peter", result.users.first().login)
+        assertEquals(1, users.size)
+        assertEquals("peter", users.first().login)
     }
 
     @Test
@@ -78,10 +70,9 @@ class UserRepositoryImplTest {
 
         // we ignore insertUsers because API fails
         // when
-        val result = repository.getUsers(since).first()
+        val users = repository.getUsers(since).first()
 
         // then
-        assertEquals(1, result.users.size)
-        assertEquals(0, result.apiUserCount) // API failed
+        assertEquals(1, users.size)
     }
 }
