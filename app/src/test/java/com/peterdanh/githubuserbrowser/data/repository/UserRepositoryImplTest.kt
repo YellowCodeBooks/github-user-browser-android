@@ -5,7 +5,6 @@ import com.peterdanh.githubuserbrowser.data.mapper.toDomain
 import com.peterdanh.githubuserbrowser.data.mapper.toEntity
 import com.peterdanh.githubuserbrowser.data.remote.GitHubApiService
 import com.peterdanh.githubuserbrowser.data.remote.dto.UserDto
-import com.peterdanh.githubuserbrowser.domain.model.User
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.every
@@ -20,6 +19,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import java.io.IOException
 import kotlin.test.Test
+import kotlin.test.assertFailsWith
 
 class UserRepositoryImplTest {
     private lateinit var api: GitHubApiService
@@ -61,18 +61,12 @@ class UserRepositoryImplTest {
     fun `getUsers should still emit Room data when API fails`() = runTest(testDispatcher) {
         // given
         val since = 0
-        val roomEntities = listOf(
-            User("peter", "https://avatar.com/1", "https://github.com/peter")
-        ).map { it.toEntity() }
-
         coEvery { api.getUsers(since) } throws IOException("No internet")
-        every { dao.getAllUsers() } returns flowOf(roomEntities)
-
-        // we ignore insertUsers because API fails
-        // when
-        val users = repository.getUsers(since).first()
+        every { dao.getAllUsers() } returns flowOf(emptyList())
 
         // then
-        assertEquals(1, users.size)
+        assertFailsWith<Exception>("Error fetching users from API and no local data: No internet") {
+            repository.getUsers(since).first()
+        }
     }
 }
