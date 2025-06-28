@@ -9,6 +9,12 @@ import androidx.navigation.toRoute
 import com.peterdanh.githubuserbrowser.presentation.screen.detail.DetailScreen
 import com.peterdanh.githubuserbrowser.presentation.screen.home.HomeScreen
 
+/**
+ * Sets up the navigation graph for the app using Jetpack Compose Navigation.
+ *
+ * @param modifier Modifier to be applied to the NavHost.
+ * @param navController Controller that handles navigation within the app.
+ */
 @Composable
 fun AppNavGraph(
     modifier: Modifier = Modifier,

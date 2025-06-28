@@ -23,6 +23,13 @@ import androidx.compose.ui.unit.dp
 import com.peterdanh.githubuserbrowser.R
 import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndroidTheme
 
+/**
+ * Displays a follower statistic with an icon, count, and label.
+ *
+ * @param icon Resource ID of the icon to display.
+ * @param label The label describing the statistic (e.g., "Follower").
+ * @param count The count value to display.
+ */
 @Composable
 fun FollowerStat(
     @DrawableRes icon: Int,

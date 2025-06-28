@@ -26,9 +26,17 @@ import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndro
 import com.peterdanh.githubuserbrowser.presentation.viewmodel.HomeViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
+import com.peterdanh.githubuserbrowser.R
 import com.peterdanh.githubuserbrowser.presentation.component.UserCard
 
+/**
+ * Displays the Home screen with a list of GitHub users.
+ *
+ * @param onNavigateToDetail Callback invoked when a user is selected, passing the username.
+ * @param viewModel The [HomeViewModel] that provides user data and handles loading state.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
@@ -47,7 +55,7 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("GitHub Users") })
+            TopAppBar(title = { Text(stringResource(R.string.home_title)) })
         }
     ) { paddingValues ->
         Box(

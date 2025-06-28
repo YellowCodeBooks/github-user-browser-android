@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">GitHubUserBrowserAndroid</string>
+    <string name="home_title">GitHub Users</string>
+    <string name="detail_title">User Details</string>
+    <string name="follower_label">Follower</string>
+    <string name="following_label">Following</string>
+    <string name="blog_label">Blog</string>
 </resources>

@@ -34,11 +34,19 @@ import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndro
 import com.peterdanh.githubuserbrowser.presentation.viewmodel.DetailViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import com.peterdanh.githubuserbrowser.presentation.component.FollowerStat
 import com.peterdanh.githubuserbrowser.presentation.component.UserCard
 import androidx.navigation.NavHostController
 import com.peterdanh.githubuserbrowser.R
 
+/**
+ * Displays the detail screen for a specific GitHub user.
+ *
+ * @param username The username of the user whose details are shown.
+ * @param navController Controller used for navigation actions.
+ * @param viewModel The [DetailViewModel] providing user details and state.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DetailScreen(
@@ -57,7 +65,7 @@ fun DetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "User Details") },
+                title = { Text(text = stringResource(R.string.detail_title)) },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -114,14 +122,14 @@ fun DetailScreen(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-                            FollowerStat(R.drawable.ic_follower, "Follower", "${user!!.followers}+")
-                            FollowerStat(R.drawable.ic_following, "Following", "${user!!.following}+")
+                            FollowerStat(R.drawable.ic_follower, stringResource(R.string.follower_label), "${user!!.followers}+")
+                            FollowerStat(R.drawable.ic_following, stringResource(R.string.following_label), "${user!!.following}+")
                         }
 
                         Spacer(modifier = Modifier.height(18.dp))
 
                         Column(modifier = Modifier.fillMaxWidth()) {
-                            Text("Blog", style = MaterialTheme.typography.headlineMedium)
+                            Text(stringResource(R.string.blog_label), style = MaterialTheme.typography.headlineMedium)
                             Text(text = user!!.htmlUrl, color = MaterialTheme.colorScheme.primary)
                         }
                     }

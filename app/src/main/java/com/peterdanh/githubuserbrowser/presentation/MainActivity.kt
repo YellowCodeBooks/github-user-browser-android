@@ -15,6 +15,10 @@ import com.peterdanh.githubuserbrowser.presentation.navigation.AppNavGraph
 import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndroidTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Main activity for the GitHub User Browser app.
+ * Sets up the Compose UI and navigation graph.
+ */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,6 +36,11 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+/**
+ * Composable that sets up the app's navigation graph.
+ *
+ * @param modifier Modifier to be applied to the root layout.
+ */
 @Composable
 fun AppContent(modifier: Modifier = Modifier) {
     val naController = rememberNavController()
