@@ -1,5 +1,6 @@
 package com.peterdanh.githubuserbrowser.data.repository
 
+import android.util.Log
 import com.peterdanh.githubuserbrowser.data.local.dao.UserDao
 import com.peterdanh.githubuserbrowser.data.mapper.toDomain
 import com.peterdanh.githubuserbrowser.data.mapper.toEntity
@@ -9,6 +10,7 @@ import com.peterdanh.githubuserbrowser.domain.model.UserDetail
 import com.peterdanh.githubuserbrowser.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
@@ -24,8 +26,15 @@ class UserRepositoryImpl(
             }
             userDao.insertUsers(remoteUsers)
             apiUserCount = remoteUsers.size
-        } catch (_: Exception) {
-            // ignore error → load from local anyway
+        } catch (e: Exception) {
+            Log.d("UserRepositoryImpl", "Error fetching users from API, loading from local, exception: ${e.message}")
+            // API failed, will check local data below
+            val localUsers = userDao.getAllUsers().map { list -> list.map { it.toDomain() } }.first()
+            if (localUsers.isEmpty()) {
+                throw Exception("Error fetching users from API and no local data: ${e.message}")
+            }
+            emit(localUsers)
+            return@flow
         }
 
         emitAll(
