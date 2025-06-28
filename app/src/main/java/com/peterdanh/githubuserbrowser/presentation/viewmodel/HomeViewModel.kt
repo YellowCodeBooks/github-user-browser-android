@@ -35,12 +35,10 @@ class HomeViewModel @Inject constructor(
             _error.value = null
 
             try {
-                getUsersUseCase(lastSince).collectLatest { result ->
-                    if (result.users.isNotEmpty()) {
-                        if (result.apiUserCount != 0) {
-                            lastSince += result.apiUserCount
-                        }
-                        _users.value = result.users
+                getUsersUseCase(lastSince).collectLatest { users ->
+                    if (users.isNotEmpty()) {
+                        _users.value = users
+                        lastSince = users.size
                     } else {
                         reachedEnd = true
                     }

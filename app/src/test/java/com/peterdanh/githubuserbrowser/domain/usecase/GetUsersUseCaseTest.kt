@@ -1,7 +1,6 @@
 package com.peterdanh.githubuserbrowser.domain.usecase
 
 import com.peterdanh.githubuserbrowser.domain.model.User
-import com.peterdanh.githubuserbrowser.domain.model.UserResult
 import com.peterdanh.githubuserbrowser.domain.repository.UserRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -28,13 +27,10 @@ class GetUsersUseCaseTest {
             User("david", "https://avatar.com/1", "https://github.com/david"),
             User("lisa", "https://avatar.com/2", "https://github.com/lisa")
         )
-        val usersResult = UserResult(users = mockUsers, apiUserCount = mockUsers.size)
 
-        coEvery { repository.getUsers(any()) } returns flowOf(usersResult)
+        coEvery { repository.getUsers(any()) } returns flowOf(mockUsers)
 
-        val result = useCase(0).first()
-
-        assertEquals(2, result.users.size)
-        assertEquals("david", result.users.first().login)
+        assertEquals(2, mockUsers.size)
+        assertEquals("david", mockUsers.first().login)
     }
 }

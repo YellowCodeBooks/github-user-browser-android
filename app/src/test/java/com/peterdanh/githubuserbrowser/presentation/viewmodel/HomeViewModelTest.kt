@@ -1,7 +1,6 @@
 package com.peterdanh.githubuserbrowser.presentation.viewmodel
 
 import com.peterdanh.githubuserbrowser.domain.model.User
-import com.peterdanh.githubuserbrowser.domain.model.UserResult
 import com.peterdanh.githubuserbrowser.domain.usecase.GetUsersUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -42,8 +41,7 @@ class HomeViewModelTest {
             User("david", "https://avatar.com/1", "https://github.com/david"),
             User("lisa", "https://avatar.com/2", "https://github.com/lisa")
         )
-        val usersResult = UserResult(users = mockUsers, apiUserCount = mockUsers.size)
-        coEvery { getUsersUseCase(any()) } returns flowOf(usersResult)
+        coEvery { getUsersUseCase(any()) } returns flowOf(mockUsers)
 
         viewModel.loadUsers()
         advanceUntilIdle()

@@ -41,6 +41,7 @@ fun HomeScreen(
 
     LaunchedEffect(users.isEmpty()) {
         if (users.isEmpty()) {
+            println("NhutLog: call load 1st")
             viewModel.loadUsers()
         }
     }
@@ -92,6 +93,7 @@ fun HomeScreen(
 
                             // Trigger loading more when reaching near end
                             if (index >= users.size - 3 && !isLoading) {
+                                println("NhutLog: call load more")
                                 viewModel.loadUsers()
                             }
                         }
