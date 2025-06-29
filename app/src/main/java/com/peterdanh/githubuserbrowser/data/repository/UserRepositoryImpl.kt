@@ -38,6 +38,7 @@ class UserRepositoryImpl(
     override fun getUsers(since: Int): Flow<List<User>> = flow {
         try {
             val remoteUsers = api.getUsers(since).map {
+                Log.d("UserRepositoryImpl", "Fetched user: ${it.id}")
                 it.toDomain().toEntity()
             }
             userDao.insertUsers(remoteUsers)

@@ -8,6 +8,7 @@ package com.peterdanh.githubuserbrowser.data.remote.dto
  * @property html_url The URL to the user's GitHub profile page.
  */
 data class UserDto(
+    val id: Long,
     val login: String,
     val avatar_url: String,
     val html_url: String

@@ -8,6 +8,7 @@ import com.peterdanh.githubuserbrowser.domain.model.UserDetail
 
 // UserDto -> Domain
 fun UserDto.toDomain(): User = User(
+    id = id,
     login = login,
     avatarUrl = avatar_url,
     htmlUrl = html_url
@@ -25,6 +26,7 @@ fun UserDetailDto.toDomain(): UserDetail = UserDetail(
 
 // Entity -> Domain
 fun UserEntity.toDomain(): User = User(
+    id = id,
     login = login,
     avatarUrl = avatarUrl,
     htmlUrl = htmlUrl
@@ -32,6 +34,7 @@ fun UserEntity.toDomain(): User = User(
 
 // Domain -> Entity
 fun User.toEntity(): UserEntity = UserEntity(
+    id = id,
     login = login,
     avatarUrl = avatarUrl,
     htmlUrl = htmlUrl
