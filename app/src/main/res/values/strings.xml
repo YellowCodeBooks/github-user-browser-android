@@ -5,4 +5,5 @@
     <string name="follower_label">Follower</string>
     <string name="following_label">Following</string>
     <string name="blog_label">Blog</string>
+    <string name="unknown_location_label">Unknown</string>
 </resources>

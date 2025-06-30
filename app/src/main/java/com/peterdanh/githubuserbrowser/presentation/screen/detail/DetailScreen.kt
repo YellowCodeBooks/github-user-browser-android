@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -34,6 +33,7 @@ import com.peterdanh.githubuserbrowser.presentation.theme.GitHubUserBrowserAndro
 import com.peterdanh.githubuserbrowser.presentation.viewmodel.DetailViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.peterdanh.githubuserbrowser.presentation.component.FollowerStat
 import com.peterdanh.githubuserbrowser.presentation.component.UserCard
@@ -106,12 +106,18 @@ fun DetailScreen(
                             avatarUrl = user!!.avatarUrl,
                             name = user!!.login,
                             subtitleContent = {
-                                user!!.location?.let {
-                                    Row(verticalAlignment = Alignment.CenterVertically) {
-                                        Icon(Icons.Outlined.Place, contentDescription = null, modifier = Modifier.size(16.dp))
-                                        Spacer(modifier = Modifier.width(4.dp))
-                                        Text(text = it, style = MaterialTheme.typography.bodySmall)
-                                    }
+                                Row(verticalAlignment = Alignment.CenterVertically) {
+                                    Icon(
+                                        painter = painterResource(R.drawable.ic_location),
+                                        contentDescription = null,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text(
+                                        text = user?.location
+                                            ?: stringResource(R.string.unknown_location_label),
+                                        style = MaterialTheme.typography.bodySmall
+                                    )
                                 }
                             }
                         )
