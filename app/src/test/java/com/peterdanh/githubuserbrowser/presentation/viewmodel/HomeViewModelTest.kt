@@ -38,8 +38,8 @@ class HomeViewModelTest {
     @Test
     fun `loadUsers should update users list and stop loading`() = runTest {
         val mockUsers = listOf(
-            User("david", "https://avatar.com/1", "https://github.com/david"),
-            User("lisa", "https://avatar.com/2", "https://github.com/lisa")
+            User(1, "david", "https://avatar.com/1", "https://github.com/david"),
+            User(2, "lisa", "https://avatar.com/2", "https://github.com/lisa")
         )
         coEvery { getUsersUseCase(any()) } returns flowOf(mockUsers)
 

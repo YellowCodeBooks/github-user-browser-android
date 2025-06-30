@@ -1,6 +1,5 @@
 package com.peterdanh.githubuserbrowser.data.repository
 
-import android.util.Log
 import com.peterdanh.githubuserbrowser.data.local.dao.UserDao
 import com.peterdanh.githubuserbrowser.data.mapper.toDomain
 import com.peterdanh.githubuserbrowser.data.mapper.toEntity
@@ -38,12 +37,10 @@ class UserRepositoryImpl(
     override fun getUsers(since: Int): Flow<List<User>> = flow {
         try {
             val remoteUsers = api.getUsers(since).map {
-                Log.d("UserRepositoryImpl", "Fetched user: ${it.id}")
                 it.toDomain().toEntity()
             }
             userDao.insertUsers(remoteUsers)
         } catch (e: Exception) {
-            Log.d("UserRepositoryImpl", "Error fetching users from API, loading from local, exception: ${e.message}")
             // API failed, will check local data below
             val localUsers = userDao.getAllUsers().map { list -> list.map { it.toDomain() } }.first()
             if (localUsers.isEmpty()) {

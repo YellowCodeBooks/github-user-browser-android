@@ -41,7 +41,7 @@ class UserRepositoryImplTest {
         // given
         val since = 0
         val apiUsers = listOf(
-            UserDto("peter", "https://avatar.com/1", "https://github.com/peter")
+            UserDto(1, "peter", "https://avatar.com/1", "https://github.com/peter")
         )
         val roomEntities = apiUsers.map { it.toDomain().toEntity() }
 
